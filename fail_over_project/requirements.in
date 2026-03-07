@@ -1,2 +1,2 @@
-django
-psycopg2
+fastapi[standard]
+tortoise-orm[asyncpg]
