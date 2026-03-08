@@ -1,6 +1,6 @@
 from tortoise import fields
 from tortoise.models import Model
-
+from app.models.enums import StatusCategory
 
 class Status(Model):
 
@@ -9,7 +9,7 @@ class Status(Model):
     name = fields.CharField(max_length=100)
 
     category = fields.CharEnumField(
-        enum_type=["todo", "active", "done"],
+        enum_type=StatusCategory,
         max_length=20
     )
 

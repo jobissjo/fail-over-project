@@ -1,26 +1,20 @@
 from tortoise import fields
 from tortoise.models import Model
-
+from app.models.enums import MediaRequestStatus, MediaRequestType
 
 class MediaRequest(Model):
 
     id = fields.IntField(pk=True)
 
     request_type = fields.CharEnumField(
-        enum_type=["add", "update"],
+        enum_type=MediaRequestType,
         max_length=20
     )
 
     status = fields.CharEnumField(
-        enum_type=[
-            "pending",
-            "accepted",
-            "resolving",
-            "resolved",
-            "rejected"
-        ],
+        enum_type=MediaRequestStatus,
         max_length=20,
-        default="pending"
+        default=MediaRequestStatus.PENDING
     )
 
     title = fields.CharField(max_length=255)

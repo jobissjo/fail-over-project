@@ -1,0 +1,79 @@
+<div class="min-h-screen bg-gradient-to-br from-[#070413] via-[#10081e] to-[#070413] text-white">
+  <div class="mx-auto max-w-7xl px-4 py-6">
+    <div class="grid grid-cols-12 gap-6">
+      <aside class="col-span-12 md:col-span-3">
+        <div class="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-4">
+          <div class="flex items-center gap-3 px-2">
+            <div class="h-10 w-10 rounded-full bg-violet-500/20 flex items-center justify-center">
+              <div class="h-5 w-5 rounded bg-violet-500"></div>
+            </div>
+            <div>
+              <div class="font-semibold">MediaTracker</div>
+              <div class="text-xs text-white/60">Personal Library</div>
+            </div>
+          </div>
+
+          <nav class="mt-6 space-y-1">
+            <a
+              routerLink="/user/dashboard"
+              routerLinkActive="bg-white/10"
+              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
+            >
+              <span class="inline-block h-2 w-2 rounded bg-violet-400"></span>
+              Dashboard
+            </a>
+            <a
+              routerLink="/user/explore"
+              routerLinkActive="bg-white/10"
+              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
+            >
+              <span class="inline-block h-2 w-2 rounded bg-white/40"></span>
+              Explore
+            </a>
+            <a
+              routerLink="/user/progress"
+              routerLinkActive="bg-white/10"
+              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
+            >
+              <span class="inline-block h-2 w-2 rounded bg-white/40"></span>
+              My Progress
+            </a>
+            <a
+              routerLink="/user/requests"
+              routerLinkActive="bg-white/10"
+              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
+            >
+              <span class="inline-block h-2 w-2 rounded bg-white/40"></span>
+              Requests
+            </a>
+          </nav>
+
+          <div class="mt-6 px-2 text-xs text-white/40">
+            Settings
+          </div>
+        </div>
+      </aside>
+
+      <section class="col-span-12 md:col-span-9">
+        <div class="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-4">
+          <div class="flex items-center justify-between gap-4">
+            <div class="w-full">
+              <input
+                class="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/40"
+                placeholder="Search your library..."
+              />
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="h-10 w-10 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10"></button>
+              <div class="h-10 w-10 rounded-2xl bg-violet-500/20 border border-white/10"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <router-outlet />
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

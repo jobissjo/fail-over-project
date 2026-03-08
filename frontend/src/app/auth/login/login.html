@@ -1,0 +1,52 @@
+<div class="min-h-screen bg-gradient-to-br from-[#090612] via-[#130a24] to-[#070413] text-white flex items-center justify-center px-4">
+  <div class="w-full max-w-md rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl p-6">
+    <div class="flex items-center gap-3">
+      <div class="h-10 w-10 rounded-full bg-violet-500/20 flex items-center justify-center">
+        <div class="h-5 w-5 rounded bg-violet-500"></div>
+      </div>
+      <div>
+        <div class="text-lg font-semibold">MediaTracker</div>
+        <div class="text-xs text-white/60">Sign in to continue</div>
+      </div>
+    </div>
+
+    <form class="mt-6 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+      <div>
+        <label class="text-xs text-white/70">Username</label>
+        <input
+          formControlName="username"
+          class="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-violet-500/50"
+          placeholder="yourname"
+        />
+      </div>
+
+      <div>
+        <label class="text-xs text-white/70">Password</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 outline-none focus:ring-2 focus:ring-violet-500/50"
+          placeholder="••••••••"
+        />
+      </div>
+
+      @if (error()) {
+        <div class="text-sm text-red-300 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2">
+          {{ error() }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="w-full rounded-xl bg-violet-500 hover:bg-violet-400 transition px-3 py-2 font-medium disabled:opacity-60"
+        [disabled]="loading()"
+      >
+        @if (loading()) { <span>Signing in...</span> } @else { <span>Sign in</span> }
+      </button>
+
+      <div class="text-xs text-white/50">
+        Backend: <span class="font-mono">/auth/login</span>
+      </div>
+    </form>
+  </div>
+</div>
