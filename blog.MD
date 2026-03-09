@@ -127,11 +127,13 @@ This is intended to be used for read-only traffic. However, note:
 
 ### 5.3 Backends: which DB nodes HAProxy can route to
 
-Both backends include all nodes:
+Both backends include all nodes. We use `option tcp-check` for basic connectivity verification:
 
 ```haproxy
 backend primary_db
     option tcp-check
+    tcp-check connect
+    
     server pg1 pg1:5432 check
     server pg2 pg2:5432 check
     server pg3 pg3:5432 check
@@ -139,6 +141,8 @@ backend primary_db
 backend replica_db
     balance roundrobin
     option tcp-check
+    tcp-check connect
+    
     server pg1 pg1:5432 check
     server pg2 pg2:5432 check
     server pg3 pg3:5432 check
@@ -146,17 +150,9 @@ backend replica_db
 
 ### What this means in practice
 
-- HAProxy is doing **health checks** (TCP + basic Postgres handshake).
-- HAProxy is **not** currently “role aware” (it doesn’t know which node is primary vs replica).
-- Both “write” and “read” pools allow all nodes as long as they are healthy.
-
-So today this behaves more like:
-
-- “route to any healthy Postgres server”
-
-rather than:
-
-- “writes only to primary, reads only to replicas”.
+- HAProxy is performing **TCP health checks**. By using `tcp-check connect`, we ensure that the Postgres service is listening and can successfully establish a TCP handshake.
+- While advanced binary checks (like sending a startup packet) can verify if Postgres is fully initialized, they are often sensitive to specific version handshakes or SSL requirements.
+- A simple TCP check is generally more reliable for basic high-availability, confirming that the container and the database process are running and accessible.
 
 ## 6) PgBouncer: the single entry point your app should use
 
