@@ -1,3 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+:root {
+  --bg-app: #070413;
+  --bg-surface: #0f0a1e;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-input: rgba(0, 0, 0, 0.4);
+  --bg-sidebar: #0f0a1e;
+  --bg-header: rgba(15, 10, 30, 0.8);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --sidebar-width: 280px;
+}
+
+[data-theme='light'] {
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #f1f5f9;
+  --bg-sidebar: #ffffff;
+  --bg-header: rgba(248, 250, 252, 0.8);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --border-color: #e2e8f0;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: var(--bg-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+}

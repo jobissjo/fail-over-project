@@ -1,0 +1,119 @@
+<div class="pb-20" *ngIf="!loading() && media() as m">
+  
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden rounded-[3rem] border border-[var(--border-color)] bg-[var(--bg-card)] backdrop-blur-3xl">
+    <!-- Background Blur -->
+    <div class="absolute inset-x-0 -top-40 -z-10 h-80 bg-violet-600/20 blur-[120px]"></div>
+    <div class="absolute right-0 top-0 -z-10 h-full w-1/3 bg-gradient-to-l from-violet-600/10 to-transparent blur-3xl"></div>
+
+    <div class="flex flex-col gap-10 p-8 lg:flex-row lg:items-end lg:p-12">
+      <!-- Poster -->
+      <div class="relative w-full max-w-[280px] shrink-0 self-center lg:self-auto">
+        <div class="aspect-[2/3] overflow-hidden rounded-[2.5rem] bg-[var(--bg-input)] shadow-2xl ring-1 ring-[var(--border-color)]">
+          <img 
+            [src]="m.image || 'https://via.placeholder.com/300x450?text=No+Image'" 
+            [alt]="m.title"
+            class="h-full w-full object-cover"
+          >
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="flex-1 space-y-8">
+        <div>
+          <div class="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-violet-400">
+            <span>{{ m.media_type }}</span>
+            <span class="h-1 w-1 rounded-full bg-[var(--border-color)]"></span>
+            <span>{{ m.total_series > 0 ? m.total_series + ' Units' : 'Single Item' }}</span>
+          </div>
+          <h1 class="mt-4 text-4xl font-extrabold tracking-tight text-[var(--text-primary)] sm:text-5xl lg:text-6xl">
+            {{ m.title }}
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-secondary)]">
+            {{ m.description || 'No description available for this title.' }}
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6">
+          <!-- Main Progress Display -->
+          <div class="flex items-center gap-4 rounded-3xl bg-[var(--bg-input)] p-4 ring-1 ring-[var(--border-color)]">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/20 text-violet-400">
+              <span class="text-lg font-bold">{{ progressPercentage }}%</span>
+            </div>
+            <div>
+              <div class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Total Progress</div>
+              <div class="text-sm font-semibold text-[var(--text-primary)]">{{ userProgress() ? getStatusName(userProgress()!.status_id) : 'Not Started' }}</div>
+            </div>
+          </div>
+
+          <!-- Status Controls -->
+          <div class="flex items-center gap-2 rounded-3xl bg-[var(--bg-input)] p-2 ring-1 ring-[var(--border-color)]">
+            <button 
+              *ngFor="let s of statuses()"
+              (click)="updateStatus(s.id)"
+              class="rounded-2xl px-5 py-2.5 text-xs font-bold transition-all"
+              [class.bg-violet-600]="userProgress()?.status_id === s.id"
+              [class.text-white]="userProgress()?.status_id === s.id"
+              [class.text-[var(--text-muted)]]="userProgress()?.status_id !== s.id"
+              [class.hover:bg-[var(--bg-surface)]]="userProgress()?.status_id !== s.id"
+            >
+              {{ s.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Units Section (for SERIES) -->
+  <div class="mt-12" *ngIf="units().length > 0">
+    <div class="mb-8 flex items-center justify-between">
+      <h2 class="text-2xl font-bold tracking-tight text-[var(--text-primary)]">Units & Episodes</h2>
+      <div class="text-sm font-medium text-[var(--text-muted)]">{{ units().length }} Units total</div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div 
+        *ngFor="let unit of units()"
+        (click)="toggleUnitProgress(unit.id)"
+        class="group relative flex items-center gap-4 rounded-[2rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-5 backdrop-blur-3xl transition-all hover:bg-[var(--bg-input)] cursor-pointer"
+        [class.ring-1]="userProgress()?.unit_id === unit.id"
+        [class.ring-violet-500/50]="userProgress()?.unit_id === unit.id"
+      >
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--bg-input)] text-sm font-bold transition-all group-hover:bg-violet-600/20 group-hover:text-violet-400">
+          {{ unit.order }}
+        </div>
+        <div class="flex-1 overflow-hidden">
+          <div class="truncate text-sm font-semibold text-[var(--text-primary)]">{{ unit.title }}</div>
+          <div class="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">Unit {{ unit.order }}</div>
+        </div>
+        <div 
+          *ngIf="userProgress()?.unit_id === unit.id"
+          class="flex h-6 w-6 items-center justify-center rounded-full bg-violet-600 text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="h-3 w-3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty Units / Standalone Item Detail -->
+  <div class="mt-12 rounded-[3rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-12 text-center backdrop-blur-3xl" *ngIf="units().length === 0">
+    <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-[var(--bg-input)] text-4xl">
+      🎬
+    </div>
+    <h3 class="text-xl font-bold text-[var(--text-primary)]">Standalone Title</h3>
+    <p class="mt-2 text-[var(--text-muted)]">This title has no sub-units. Update your overall progress status above.</p>
+  </div>
+
+</div>
+
+<!-- Loading Overlay -->
+<div *ngIf="loading()" class="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-app)]/80 backdrop-blur-md">
+  <div class="flex flex-col items-center gap-6">
+    <div class="h-16 w-16 animate-spin rounded-full border-4 border-violet-500/20 border-t-violet-500"></div>
+    <div class="text-sm font-bold uppercase tracking-[0.3em] text-violet-500">Accessing Archives</div>
+  </div>
+</div>

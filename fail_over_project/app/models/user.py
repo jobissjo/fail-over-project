@@ -2,7 +2,7 @@ from tortoise import fields
 from tortoise.models import Model
 from enum import Enum
 
-class UserRole(Enum,str):
+class UserRole(str, Enum):
     ADMIN = 'admin'
     USER = 'user'
 

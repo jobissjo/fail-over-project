@@ -1,1 +1,86 @@
-<p>dashboard works!</p>
+<div class="space-y-10 pb-12">
+  
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Stat Cards -->
+    <div class="rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-8 backdrop-blur-3xl shadow-xl">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600/20 text-violet-400 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM2.25 17.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z" />
+        </svg>
+      </div>
+      <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Total Titles</div>
+      <div class="mt-2 text-4xl font-extrabold">{{ stats().totalMedia }}</div>
+      <div class="mt-4 flex items-center gap-2 text-[10px] font-bold text-violet-400">
+        <span class="inline-block h-1 w-4 rounded-full bg-violet-500"></span>
+        Global Database
+      </div>
+    </div>
+
+    <div class="rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-8 backdrop-blur-3xl shadow-xl">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-500 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v.008z" />
+        </svg>
+      </div>
+      <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Pending Requests</div>
+      <div class="mt-2 text-4xl font-extrabold text-amber-500">{{ stats().pendingRequests }}</div>
+      <div class="mt-4 flex items-center gap-2 text-[10px] font-bold text-amber-500/50">
+        <span class="inline-block h-1 w-4 rounded-full bg-amber-500 animate-pulse"></span>
+        Action Required
+      </div>
+    </div>
+
+    <div class="rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-8 backdrop-blur-3xl shadow-xl">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600/20 text-blue-400 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+        </svg>
+      </div>
+      <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Total Requests</div>
+      <div class="mt-2 text-4xl font-extrabold">{{ stats().totalRequests }}</div>
+      <div class="mt-4 flex items-center gap-2 text-[10px] font-bold text-blue-400/50">
+        <span class="inline-block h-1 w-4 rounded-full bg-blue-500"></span>
+        Historical Submissions
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="rounded-[2.5rem] border border-white/5 bg-[#12121a]/30 p-10 backdrop-blur-xl">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-xl font-bold tracking-tight">Recent User Requests</h2>
+      <a routerLink="/admin/user-media-requests" class="text-xs font-bold uppercase tracking-widest text-violet-400 hover:text-white transition-colors">View All Archive</a>
+    </div>
+
+    <div class="space-y-4">
+      <div 
+        *ngFor="let req of recentRequests()"
+        class="flex items-center justify-between rounded-3xl bg-white/5 border border-white/5 p-5 transition-all hover:bg-white/10"
+      >
+        <div class="flex items-center gap-4">
+          <div class="h-10 w-10 flex items-center justify-center rounded-2xl bg-white/5 text-lg">
+            {{ req.request_type === 'ADD' ? '🆕' : '🆙' }}
+          </div>
+          <div>
+            <div class="font-bold text-white">{{ req.media_title }}</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest text-white/20">{{ req.request_type }} Request</div>
+          </div>
+        </div>
+        <div 
+          class="rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest"
+          [class.bg-amber-500/20]="req.status === 'PENDING'"
+          [class.text-amber-500]="req.status === 'PENDING'"
+          [class.bg-green-500/20]="req.status === 'RESOLVED'"
+          [class.text-green-500]="req.status === 'RESOLVED'"
+        >
+          {{ req.status }}
+        </div>
+      </div>
+
+      <div *ngIf="recentRequests().length === 0" class="py-12 text-center opacity-20">
+        <p class="text-xs font-bold uppercase tracking-widest">No recent activity detected</p>
+      </div>
+    </div>
+  </div>
+
+</div>

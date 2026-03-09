@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-[#070412] text-white/90 selection:bg-amber-500/30">
+  <div class="mx-auto max-w-[1600px] px-4 py-6 md:px-8">
+    <div class="grid grid-cols-12 gap-8">
+      
+      <!-- Sidebar -->
+      <aside class="col-span-12 md:col-span-3 lg:col-span-2">
+        <div class="sticky top-6 flex h-[calc(100vh-3rem)] flex-col rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-6 backdrop-blur-3xl shadow-2xl shadow-black/50">
+          
+          <!-- Brand -->
+          <div class="flex items-center gap-3 px-2">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/20">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6 text-white">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.333 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751A11.956 11.956 0 0112 2.714z" />
+              </svg>
+            </div>
+            <div>
+              <div class="text-lg font-bold tracking-tight text-white">AdminHub</div>
+              <div class="text-[10px] font-medium uppercase tracking-widest text-white/40">Core Operations</div>
+            </div>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="mt-10 flex-1 space-y-2">
+            <a
+              routerLink="/admin/dashboard"
+              routerLinkActive="bg-white/5 text-amber-400 ring-1 ring-white/10"
+              class="group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all hover:bg-white/5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 opacity-40 group-hover:opacity-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25a2.25 2.25 0 01-2.25 2.25h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z" />
+              </svg>
+              Overview
+            </a>
+            <a
+              routerLink="/admin/media"
+              routerLinkActive="bg-white/5 text-amber-400 ring-1 ring-white/10"
+              class="group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all hover:bg-white/5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 opacity-40 group-hover:opacity-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0v3.75" />
+              </svg>
+              Media Database
+            </a>
+            <a
+              routerLink="/admin/user-media-requests"
+              routerLinkActive="bg-white/5 text-amber-400 ring-1 ring-white/10"
+              class="group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all hover:bg-white/5"
+            >
+              <div class="relative">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 opacity-40 group-hover:opacity-100">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+                <div class="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-amber-500"></div>
+              </div>
+              User Requests
+            </a>
+            <a
+              routerLink="/admin/media-types"
+              routerLinkActive="bg-white/5 text-amber-400 ring-1 ring-white/10"
+              class="group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all hover:bg-white/5"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 opacity-40 group-hover:opacity-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.659A2.25 2.25 0 009.568 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+              </svg>
+              Media Types
+            </a>
+
+            <div class="my-4 border-t border-white/5 mx-2"></div>
+            
+            <a
+              routerLink="/user"
+              class="group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all hover:bg-white/5 text-white/40"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 opacity-40 group-hover:opacity-100">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+              </svg>
+              Exit Console
+            </a>
+          </nav>
+
+          <!-- User Footer -->
+          <div class="mt-auto space-y-4">
+            <div class="flex items-center gap-3 rounded-[2rem] bg-white/5 p-3 ring-1 ring-white/5">
+              <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 p-[2px]">
+                <div class="h-full w-full rounded-full bg-[#12121a] flex items-center justify-center text-xs font-bold uppercase text-amber-500">
+                  {{ username.substring(0, 2) }}
+                </div>
+              </div>
+              <div class="flex-1 overflow-hidden">
+                <div class="truncate text-sm font-semibold">{{ username }}</div>
+                <div class="text-[10px] uppercase tracking-wider text-white/30">Super Admin</div>
+              </div>
+            </div>
+            <button 
+              (click)="logout()"
+              class="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-500/10 py-3 text-sm font-semibold text-red-500 transition-all hover:bg-red-500 hover:text-white"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <section class="col-span-12 md:col-span-9 lg:col-span-10">
+        
+        <!-- Top Bar -->
+        <header class="flex items-center justify-between rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-4 backdrop-blur-3xl">
+          <div class="flex flex-1 items-center gap-4 px-4 text-xs font-bold uppercase tracking-widest text-white/20">
+            System Infrastructure Monitoring Active
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-500/10 text-amber-500 text-[10px] font-bold uppercase tracking-widest">
+              <span class="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+              Admin Session
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="mt-8">
+          <router-outlet />
+        </main>
+      </section>
+
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Auth } from '../../Services/auth';
@@ -10,12 +10,10 @@ import { Auth } from '../../Services/auth';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
-  form!:FormGroup;
-
-  
+  form!: FormGroup;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -28,7 +26,7 @@ export class Login {
   //   password: ['', [Validators.required]],
   // });
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.form = this.fb.nonNullable.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],

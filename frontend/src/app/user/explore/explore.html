@@ -1,1 +1,90 @@
-<p>explore works!</p>
+<div class="space-y-8 pb-12">
+  
+  <!-- Header & Filters -->
+  <div class="rounded-[2.5rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-6 backdrop-blur-xl">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-[var(--text-primary)]">Explore Media</h1>
+        <p class="mt-1 text-sm text-[var(--text-muted)]">Discover new titles to add to your collection</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <!-- Search bar -->
+        <div class="relative min-w-[240px]">
+          <input 
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onFilterChange()"
+            class="w-full rounded-2xl bg-[var(--bg-input)] border border-[var(--border-color)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-violet-500/40 placeholder:text-[var(--text-muted)]"
+            placeholder="Search titles..."
+          >
+        </div>
+
+        <!-- Type Filter -->
+        <select 
+          [(ngModel)]="selectedType"
+          (ngModelChange)="onFilterChange()"
+          class="rounded-2xl bg-[var(--bg-input)] border border-[var(--border-color)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-violet-500/40 appearance-none min-w-[140px]"
+        >
+          <option [ngValue]="null">All Types</option>
+          <option *ngFor="let type of mediaTypes()" [ngValue]="type.id">{{ type.name }}</option>
+        </select>
+
+        <!-- Status Filter -->
+        <select 
+          [(ngModel)]="selectedStatus"
+          (ngModelChange)="onFilterChange()"
+          class="rounded-2xl bg-[var(--bg-input)] border border-[var(--border-color)] px-4 py-2.5 text-sm text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-violet-500/40 appearance-none min-w-[140px]"
+        >
+          <option [ngValue]="null">Any Status</option>
+          <option *ngFor="let status of statuses()" [ngValue]="status.id">{{ status.name }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Media Grid -->
+  <div *ngIf="!loading()">
+    <div *ngIf="filteredMedia.length > 0" class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+      <app-media-card 
+        *ngFor="let media of filteredMedia" 
+        [media]="media" 
+        [progress]="progressMap().get(media.id)"
+        (viewDetails)="viewDetails($event)"
+      />
+    </div>
+
+    <!-- Empty Results -->
+    <div *ngIf="filteredMedia.length === 0" class="flex h-64 flex-col items-center justify-center text-center">
+      <div class="mb-4 text-4xl">🔍</div>
+      <h3 class="text-lg font-bold text-[var(--text-primary)]">No results found</h3>
+      <p class="mt-2 text-sm text-[var(--text-muted)]">Try adjusting your filters or search query.</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    <div *ngFor="let i of [1,2,3,4,5,6]" class="aspect-[2/3] animate-pulse rounded-3xl bg-white/5 border border-white/5"></div>
+  </div>
+
+  <!-- Pagination (Simple) -->
+  <div *ngIf="!loading() && totalItems() > pageSize()" class="mt-10 flex items-center justify-center gap-4">
+    <button 
+      (click)="onPageChange(currentPage() - 1)"
+      [disabled]="currentPage() === 1"
+      class="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] disabled:opacity-20"
+    >
+      Previous
+    </button>
+    <span class="text-sm font-medium text-[var(--text-muted)]">
+      Page {{ currentPage() }} of {{ getTotalPages() }}
+    </span>
+    <button 
+      (click)="onPageChange(currentPage() + 1)"
+      [disabled]="currentPage() * pageSize() >= totalItems()"
+      class="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-input)] disabled:opacity-20"
+    >
+      Next
+    </button>
+  </div>
+
+</div>

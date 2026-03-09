@@ -1,1 +1,117 @@
-<p>media works!</p>
+<div class="space-y-8 pb-12">
+  
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight">Media Database</h1>
+      <p class="mt-1 text-sm text-white/40">Maintain the core library of movies, series, games and books</p>
+    </div>
+    <button 
+      (click)="openCreateForm()"
+      class="rounded-2xl bg-amber-500 px-6 py-3 text-sm font-bold text-black shadow-xl shadow-amber-500/20 hover:bg-amber-400 transition-all"
+    >
+      + Add New Media
+    </button>
+  </div>
+
+  <!-- Form Overlay (Simple implementation) -->
+  <div *ngIf="showForm()" class="fixed inset-0 z-50 flex items-center justify-center bg-[#070412]/90 backdrop-blur-xl p-4">
+    <div class="w-full max-w-2xl rounded-[3rem] border border-white/10 bg-[#12121a] p-8 shadow-2xl">
+      <div class="mb-8 flex items-center justify-between">
+        <h2 class="text-2xl font-bold">{{ editingMedia() ? 'Edit Media' : 'Add New Entry' }}</h2>
+        <button (click)="showForm.set(false)" class="text-white/40 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submitForm()" class="space-y-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="md:col-span-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Title</label>
+            <input formControlName="title" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Poster Image URL</label>
+            <input formControlName="image" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40" placeholder="https://...">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Media Type ID</label>
+            <input type="number" formControlName="media_type_id" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Total Units (e.g. Episodes)</label>
+            <input type="number" formControlName="total_series" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40">
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Description</label>
+            <textarea formControlName="description" rows="3" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40"></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" (click)="showForm.set(false)" class="rounded-2xl bg-white/5 px-8 py-3 text-sm font-bold text-white/60 hover:bg-white/10">Cancel</button>
+          <button type="submit" class="rounded-2xl bg-amber-500 px-8 py-3 text-sm font-bold text-black hover:bg-amber-400">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Media Table -->
+  <div class="rounded-[2.5rem] border border-white/5 bg-[#12121a]/30 p-8 backdrop-blur-xl">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-white/5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/20">
+            <th class="pb-4 pl-4">Media</th>
+            <th class="pb-4">Type</th>
+            <th class="pb-4">Units</th>
+            <th class="pb-4 text-right pr-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <tr *ngFor="let m of mediaList()" class="group hover:bg-white/5">
+            <td class="py-4 pl-4">
+              <div class="flex items-center gap-4">
+                <div class="h-12 w-10 shrink-0 overflow-hidden rounded-lg bg-black/40">
+                  <img [src]="m.image" class="h-full w-full object-cover">
+                </div>
+                <div class="font-bold text-white group-hover:text-amber-500 transition-colors">{{ m.title }}</div>
+              </div>
+            </td>
+            <td class="py-4 text-sm text-white/40">ID: {{ m.media_type_id }}</td>
+            <td class="py-4 text-sm font-mono text-white/60">{{ m.total_series }}</td>
+            <td class="py-4 pr-4 text-right">
+              <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button (click)="editMedia(m)" class="h-9 w-9 flex items-center justify-center rounded-xl bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                  </svg>
+                </button>
+                <button (click)="deleteMedia(m.id)" class="h-9 w-9 flex items-center justify-center rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div *ngIf="loading()" class="py-12 flex justify-center">
+        <div class="h-8 w-8 animate-spin rounded-full border-2 border-amber-500/20 border-t-amber-500"></div>
+      </div>
+      
+      <div *ngIf="!loading() && mediaList().length === 0" class="py-20 text-center opacity-20">
+        <div class="text-4xl mb-4">🗄️</div>
+        <p class="text-sm font-bold uppercase tracking-widest">Database is empty</p>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,1 +1,97 @@
-<p>register works!</p>
+<div class="min-h-screen bg-[#070412] text-white flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    
+    <!-- Logo -->
+    <div class="mb-10 flex flex-col items-center text-center">
+      <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-[2rem] bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-2xl shadow-violet-500/20">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-8 w-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight">Create Account</h1>
+      <p class="mt-2 text-sm text-white/40">Start tracking your media collection today</p>
+    </div>
+
+    <!-- Card -->
+    <div class="rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-8 backdrop-blur-3xl shadow-2xl">
+      <form class="space-y-5" [formGroup]="form" (ngSubmit)="submit()">
+        
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Username</label>
+          <div class="relative group">
+            <input
+              formControlName="username"
+              class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm transition-all focus:border-violet-500/50 focus:bg-black/60 outline-none focus:ring-4 focus:ring-violet-500/10 placeholder:text-white/10"
+              placeholder="choose_a_name"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Email Address</label>
+          <div class="relative group">
+            <input
+              type="email"
+              formControlName="email"
+              class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm transition-all focus:border-violet-500/50 focus:bg-black/60 outline-none focus:ring-4 focus:ring-violet-500/10 placeholder:text-white/10"
+              placeholder="you@example.com"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Password</label>
+            <input
+              type="password"
+              formControlName="password"
+              class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm transition-all focus:border-violet-500/50 focus:bg-black/60 outline-none focus:ring-4 focus:ring-violet-500/10 placeholder:text-white/10"
+              placeholder="••••••••"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Confirm</label>
+            <input
+              type="password"
+              formControlName="confirmPassword"
+              class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm transition-all focus:border-violet-500/50 focus:bg-black/60 outline-none focus:ring-4 focus:ring-violet-500/10 placeholder:text-white/10"
+              placeholder="••••••••"
+            />
+          </div>
+        </div>
+
+        @if (error()) {
+          <div class="rounded-2xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-xs text-red-400 font-medium">
+            {{ error() }}
+          </div>
+        }
+
+        @if (form.hasError('mismatch') && form.get('confirmPassword')?.touched) {
+          <div class="rounded-2xl bg-amber-500/10 border border-amber-500/20 px-4 py-3 text-xs text-amber-400 font-medium">
+            Passwords do not match
+          </div>
+        }
+
+        <button
+          type="submit"
+          class="relative w-full overflow-hidden rounded-2xl bg-violet-600 px-6 py-4 text-sm font-bold text-white transition-all hover:bg-violet-500 hover:shadow-xl hover:shadow-violet-600/30 disabled:opacity-50"
+          [disabled]="loading() || form.invalid"
+        >
+          <span [class.opacity-0]="loading()">Create Account</span>
+          @if (loading()) {
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
+            </div>
+          }
+        </button>
+      </form>
+
+      <div class="mt-8 text-center">
+        <p class="text-xs text-white/30">
+          Already have an account? 
+          <a routerLink="/login" class="font-bold text-violet-400 hover:text-violet-300">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

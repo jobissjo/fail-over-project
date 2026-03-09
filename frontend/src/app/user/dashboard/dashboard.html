@@ -1,1 +1,104 @@
-<p>dashboard works!</p>
+<div class="space-y-10 pb-12">
+  
+  <!-- Stats Section -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div class="flex items-center gap-4 rounded-[2rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-6 backdrop-blur-xl">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-500/20 text-green-500">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-2xl font-bold tracking-tight text-[var(--text-primary)]">{{ stats().completed }}</div>
+        <div class="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">Completed</div>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-4 rounded-[2rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-6 backdrop-blur-xl">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/20 text-blue-500">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-2xl font-bold tracking-tight text-[var(--text-primary)]">{{ stats().active }}</div>
+        <div class="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">Active Items</div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4 rounded-[2rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-6 backdrop-blur-xl">
+      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500/20 text-violet-500">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-6 w-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <div>
+        <div class="text-2xl font-bold tracking-tight text-[var(--text-primary)]">{{ stats().planned }}</div>
+        <div class="text-[10px] uppercase tracking-widest text-[var(--text-muted)]">Planned</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Continue Watching / Reading -->
+  <section *ngIf="activeItems().length > 0">
+    <div class="mb-6 flex items-center justify-between">
+      <h2 class="text-xl font-bold tracking-tight">Continue Playing & Watching</h2>
+      <a routerLink="/user/explore" class="text-xs font-bold text-violet-400 hover:text-violet-300">View All</a>
+    </div>
+    <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <app-media-card 
+        *ngFor="let item of activeItems()" 
+        [media]="item.media" 
+        [progress]="item.progress"
+        (viewDetails)="viewDetails($event)"
+      />
+    </div>
+  </section>
+
+  <!-- Planned -->
+  <section *ngIf="plannedItems().length > 0">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold tracking-tight">Your Watchlist</h2>
+    </div>
+    <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <app-media-card 
+        *ngFor="let item of plannedItems()" 
+        [media]="item.media" 
+        [progress]="item.progress"
+        (viewDetails)="viewDetails($event)"
+      />
+    </div>
+  </section>
+
+  <!-- Recently Completed -->
+  <section *ngIf="completedItems().length > 0">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold tracking-tight">Recently Completed</h2>
+    </div>
+    <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <app-media-card 
+        *ngFor="let item of completedItems()" 
+        [media]="item.media" 
+        [progress]="item.progress"
+        (viewDetails)="viewDetails($event)"
+      />
+    </div>
+  </section>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="flex h-64 flex-col items-center justify-center gap-4">
+    <div class="h-10 w-10 animate-spin rounded-full border-4 border-violet-500/20 border-t-violet-500"></div>
+    <p class="text-sm font-medium text-white/20 uppercase tracking-widest">Sychronizing Library...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && activeItems().length === 0 && plannedItems().length === 0" class="flex h-64 flex-col items-center justify-center text-center">
+    <div class="mb-4 text-4xl">📚</div>
+    <h3 class="text-lg font-bold text-[var(--text-primary)]">Your library is empty</h3>
+    <p class="mt-2 text-sm text-[var(--text-muted)]">Start exploring media to add items to your dashboard.</p>
+    <a routerLink="/user/explore" class="mt-6 rounded-2xl bg-violet-600 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-violet-600/20 hover:bg-violet-500">
+      Explore Media
+    </a>
+  </div>
+
+</div>

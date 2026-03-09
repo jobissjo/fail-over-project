@@ -5,7 +5,7 @@ from app.models.user import User
 from app.schemas.progress import ProgressStatusPatch, ProgressUpsert, UserMediaProgressOut
 from app.services.progress_service import ProgressService
 
-router = APIRouter(prefix="/progress", tags=["progress"])
+router = APIRouter(prefix="/api/progress", tags=["progress"])
 
 
 @router.get("/", response_model=list[UserMediaProgressOut])

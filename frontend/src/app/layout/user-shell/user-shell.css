@@ -1,0 +1,49 @@
+.nav-link {
+  color: var(--text-secondary);
+}
+
+.nav-link:hover {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.active-link {
+  background-color: var(--accent);
+  color: white !important;
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.3);
+}
+
+.active-link:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Custom Scrollbar for Main Content */
+main::-webkit-scrollbar {
+  width: 8px;
+}
+
+main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Transitions */
+.nav-link svg {
+  transition: transform 0.2s ease;
+}
+
+.nav-link:hover svg {
+  transform: translateX(4px);
+}
+
+.active-link svg {
+  transform: none !important;
+}

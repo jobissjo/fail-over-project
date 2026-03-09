@@ -4,7 +4,7 @@ from app.core.auth import require_admin
 from app.schemas.media_unit import MediaUnitCreate, MediaUnitOut, MediaUnitUpdate
 from app.services.media_unit_service import MediaUnitService
 
-router = APIRouter(prefix="/media-units", tags=["media-units"])
+router = APIRouter(prefix="/api/media-units", tags=["media-units"])
 
 
 @router.get("/", response_model=list[MediaUnitOut])

@@ -4,7 +4,7 @@ from app.core.auth import require_admin
 from app.schemas.media_type import MediaTypeCreate, MediaTypeOut, MediaTypeUpdate
 from app.services.media_type_service import MediaTypeService
 
-router = APIRouter(prefix="/media-types", tags=["media-types"])
+router = APIRouter(prefix="/api/media-types", tags=["media-types"])
 
 
 @router.get("/", response_model=list[MediaTypeOut])

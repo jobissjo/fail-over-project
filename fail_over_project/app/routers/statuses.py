@@ -4,7 +4,7 @@ from app.core.auth import require_admin
 from app.schemas.status import StatusCreate, StatusOut, StatusUpdate
 from app.services.status_service import StatusService
 
-router = APIRouter(prefix="/status", tags=["status"])
+router = APIRouter(prefix="/api/status", tags=["status"])
 
 
 @router.get("/", response_model=list[StatusOut])

@@ -1,1 +1,40 @@
-<p>media-types works!</p>
+<div class="space-y-8 pb-12">
+  
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight">Media Types</h1>
+      <p class="mt-1 text-sm text-white/40">Categories and classifications for the media engine</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div 
+      *ngFor="let type of types()"
+      class="group relative overflow-hidden rounded-[2.5rem] border border-white/5 bg-[#12121a]/60 p-8 backdrop-blur-3xl shadow-xl transition-all hover:bg-white/5"
+    >
+      <div class="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-white/5 to-transparent blur-2xl group-hover:from-violet-500/10 transition-all"></div>
+      
+      <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-3xl mb-6 group-hover:scale-110 transition-transform">
+        {{ type.name === 'Film' ? '🎬' : type.name === 'Series' ? '📺' : type.name === 'Game' ? '🎮' : type.name === 'Book' ? '📚' : '📦' }}
+      </div>
+      
+      <h3 class="text-xl font-bold text-white">{{ type.name }}</h3>
+      <div class="mt-2 text-xs font-bold uppercase tracking-widest text-white/20">System ID: {{ type.id }}</div>
+      
+      <div class="mt-6 flex items-center justify-between border-t border-white/5 pt-6 group-hover:border-violet-500/20 transition-all">
+        <div class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Active Configuration</div>
+        <div class="h-2 w-2 rounded-full bg-green-500"></div>
+      </div>
+    </div>
+
+    <div *ngIf="loading()" class="col-span-full py-20 flex justify-center">
+      <div class="h-8 w-8 animate-spin rounded-full border-2 border-violet-500/20 border-t-violet-500"></div>
+    </div>
+
+    <div *ngIf="!loading() && types().length === 0" class="col-span-full py-20 text-center opacity-20">
+      <div class="text-4xl mb-4">🌀</div>
+      <p class="text-sm font-bold uppercase tracking-widest">No types configured</p>
+    </div>
+  </div>
+
+</div>

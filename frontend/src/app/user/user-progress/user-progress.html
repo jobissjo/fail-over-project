@@ -1,1 +1,116 @@
-<p>user-progress works!</p>
+<div class="h-[calc(100vh-16rem)] flex flex-col">
+  
+  <div class="mb-8 flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold tracking-tight">My Progress</h1>
+      <p class="mt-1 text-sm text-white/40">Manage your collection across different stages</p>
+    </div>
+    <div class="flex items-center gap-2 rounded-2xl bg-white/5 p-1 ring-1 ring-white/5">
+      <div class="px-4 py-2 text-xs font-bold text-violet-400">Kanban View</div>
+    </div>
+  </div>
+
+  <!-- Kanban Board -->
+  <div class="flex flex-1 gap-6 overflow-x-auto pb-6 scrollbar-hide">
+    
+    <!-- Columns -->
+    <div 
+      *ngFor="let col of columns(); let first = first; let last = last" 
+      class="flex h-full w-80 shrink-0 flex-col gap-4 rounded-[2.5rem] border border-white/5 bg-[#12121a]/30 p-4 backdrop-blur-xl"
+    >
+      <!-- Column Header -->
+      <div class="flex items-center justify-between px-4 py-2">
+        <div class="flex items-center gap-2">
+          <div 
+            class="h-2 w-2 rounded-full"
+            [class.bg-gray-500]="col.status.category === 'todo'"
+            [class.bg-blue-500]="col.status.category === 'active'"
+            [class.bg-green-500]="col.status.category === 'done'"
+          ></div>
+          <h2 class="text-xs font-bold uppercase tracking-widest text-white/60">{{ col.status.name }}</h2>
+        </div>
+        <div class="rounded-full bg-white/5 px-2.5 py-1 text-[10px] font-bold text-white/40">
+          {{ col.items.length }}
+        </div>
+      </div>
+
+      <!-- Column Items -->
+      <div class="flex-1 space-y-4 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10">
+        <div 
+          *ngFor="let item of col.items"
+          class="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/5 p-4 transition-all hover:bg-white/10"
+        >
+          <div class="flex gap-4">
+            <div 
+              class="h-16 w-12 shrink-0 overflow-hidden rounded-xl bg-black/40 cursor-pointer"
+              (click)="viewDetails(item.media.id)"
+            >
+              <img [src]="item.media.image" class="h-full w-full object-cover">
+            </div>
+            <div class="flex-1 overflow-hidden">
+              <div class="truncate text-sm font-semibold text-white/90 group-hover:text-violet-400 transition-colors cursor-pointer" (click)="viewDetails(item.media.id)">
+                {{ item.media.title }}
+              </div>
+              <div class="mt-1 text-[10px] text-white/30">{{ item.media.media_type ?? 'Unknown'}}</div>
+              
+              <!-- Quick Progress Mini Bar -->
+              <div class="mt-3 flex items-center gap-2">
+                <div class="h-1 flex-1 rounded-full bg-white/5">
+                  <div 
+                    class="h-full rounded-full transition-all"
+                    [class.bg-violet-500]="col.status.category !== 'done'"
+                    [class.bg-green-500]="col.status.category === 'done'"
+                    [style.width.%]="item.progress.completed ? 100 : 50"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-4 flex items-center justify-between border-t border-white/5 pt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div class="flex items-center gap-1">
+              <button 
+                *ngIf="!first"
+                (click)="moveStatus(item.progress.id, columns()[columns().indexOf(col)-1].status.id)"
+                class="flex h-8 w-8 items-center justify-center rounded-xl bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                title="Move Left"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+              <button 
+                *ngIf="!last"
+                (click)="moveStatus(item.progress.id, columns()[columns().indexOf(col)+1].status.id)"
+                class="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-600/20 text-violet-400 hover:bg-violet-600 hover:text-white"
+                title="Move Right"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
+            </div>
+            
+            <button 
+              (click)="deleteProgress(item.progress.id)"
+              class="flex h-8 w-8 items-center justify-center rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white"
+              title="Remove"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="col.items.length === 0" class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-white/5 py-10 opacity-20">
+          <div class="text-2xl mb-2">🍃</div>
+          <div class="text-[10px] uppercase font-bold tracking-widest">Empty</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

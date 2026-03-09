@@ -3,7 +3,7 @@ from fastapi import APIRouter, status
 from app.schemas.auth import LoginIn, RegisterIn, TokenOut, UserOut
 from app.services.auth_service import AuthService
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
 @router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)

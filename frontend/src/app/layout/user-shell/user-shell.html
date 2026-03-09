@@ -1,79 +1,184 @@
-<div class="min-h-screen bg-gradient-to-br from-[#070413] via-[#10081e] to-[#070413] text-white">
-  <div class="mx-auto max-w-7xl px-4 py-6">
-    <div class="grid grid-cols-12 gap-6">
-      <aside class="col-span-12 md:col-span-3">
-        <div class="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-4">
-          <div class="flex items-center gap-3 px-2">
-            <div class="h-10 w-10 rounded-full bg-violet-500/20 flex items-center justify-center">
-              <div class="h-5 w-5 rounded bg-violet-500"></div>
-            </div>
-            <div>
-              <div class="font-semibold">MediaTracker</div>
-              <div class="text-xs text-white/60">Personal Library</div>
-            </div>
-          </div>
-
-          <nav class="mt-6 space-y-1">
-            <a
-              routerLink="/user/dashboard"
-              routerLinkActive="bg-white/10"
-              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
-            >
-              <span class="inline-block h-2 w-2 rounded bg-violet-400"></span>
-              Dashboard
-            </a>
-            <a
-              routerLink="/user/explore"
-              routerLinkActive="bg-white/10"
-              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
-            >
-              <span class="inline-block h-2 w-2 rounded bg-white/40"></span>
-              Explore
-            </a>
-            <a
-              routerLink="/user/progress"
-              routerLinkActive="bg-white/10"
-              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
-            >
-              <span class="inline-block h-2 w-2 rounded bg-white/40"></span>
-              My Progress
-            </a>
-            <a
-              routerLink="/user/requests"
-              routerLinkActive="bg-white/10"
-              class="flex items-center gap-3 rounded-2xl px-3 py-2 text-sm text-white/80 hover:bg-white/10"
-            >
-              <span class="inline-block h-2 w-2 rounded bg-white/40"></span>
-              Requests
-            </a>
-          </nav>
-
-          <div class="mt-6 px-2 text-xs text-white/40">
-            Settings
-          </div>
-        </div>
-      </aside>
-
-      <section class="col-span-12 md:col-span-9">
-        <div class="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-4">
-          <div class="flex items-center justify-between gap-4">
-            <div class="w-full">
-              <input
-                class="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/40"
-                placeholder="Search your library..."
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <button class="h-10 w-10 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10"></button>
-              <div class="h-10 w-10 rounded-2xl bg-violet-500/20 border border-white/10"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6">
-          <router-outlet />
-        </div>
-      </section>
+<div class="min-h-screen bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors duration-300">
+  
+  <!-- Fixed Sidebar (Desktop) -->
+  <aside class="fixed inset-y-0 left-0 z-50 hidden w-[var(--sidebar-width)] flex-col border-r border-[var(--border-color)] bg-[var(--bg-sidebar)] transition-all md:flex">
+    <!-- Logo Section -->
+    <div class="flex h-20 items-center gap-3 px-8">
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 font-bold text-white shadow-lg shadow-violet-600/20">
+        MT
+      </div>
+      <div class="flex flex-col">
+        <span class="text-sm font-bold tracking-tight">MediaTracker</span>
+        <span class="text-[10px] font-medium uppercase tracking-widest text-[var(--text-secondary)]">Personal Vault</span>
+      </div>
     </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 space-y-2 px-4 py-8">
+      <a
+        routerLink="/user/dashboard"
+        routerLinkActive="active-link"
+        class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z" />
+        </svg>
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/user/explore"
+        routerLinkActive="active-link"
+        class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m24.432 0X12 10.5" />
+        </svg>
+        Explore
+      </a>
+
+      <a
+        routerLink="/user/progress"
+        routerLinkActive="active-link"
+        class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+        </svg>
+        My Progress
+      </a>
+
+      <a
+        routerLink="/user/requests"
+        routerLinkActive="active-link"
+        class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Requests
+      </a>
+
+      <div class="my-6 border-t border-[var(--border-color)] mx-4"></div>
+
+      <a
+        *ngIf="isAdmin"
+        routerLink="/admin"
+        routerLinkActive="active-link"
+        class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-amber-500 transition-all hover:bg-amber-500/10"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.333 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751A11.956 11.956 0 0112 2.714z" />
+        </svg>
+        Admin Portal
+      </a>
+      
+      <a
+        routerLink="/user/profile"
+        routerLinkActive="active-link"
+        class="nav-link flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition-all"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+        Profile
+      </a>
+    </nav>
+
+    <!-- User Section Bottom -->
+    <div class="border-t border-[var(--border-color)] p-6">
+      <div class="flex items-center gap-3 rounded-2xl bg-[var(--bg-surface)] p-3">
+        <div class="h-10 w-10 flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 to-fuchsia-600 text-xs font-bold text-white uppercase">
+          {{ username.substring(0, 2) }}
+        </div>
+        <div class="flex flex-1 flex-col overflow-hidden">
+          <span class="truncate text-sm font-bold">{{ username }}</span>
+          <span class="text-[10px] font-medium uppercase text-[var(--text-secondary)]">{{ isAdmin ? 'Admin' : 'Collector' }}</span>
+        </div>
+      </div>
+      <button 
+        (click)="logout()"
+        class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 py-2.5 text-xs font-bold text-red-500 transition-all hover:bg-red-500 hover:text-white"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="flex flex-col md:ml-[var(--sidebar-width)] overflow-hidden">
+    <!-- Top Header -->
+    <header class="sticky top-0 z-40 flex h-20 shrink-0 items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-header)] px-8 backdrop-blur-md">
+      <!-- Search -->
+      <div class="flex flex-1 items-center gap-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 text-[var(--text-secondary)]">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <input
+          class="w-full max-w-md bg-transparent text-sm font-medium outline-none placeholder:text-[var(--text-secondary)]"
+          placeholder="Search items..."
+        />
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-4">
+        <!-- Theme Toggle -->
+        <button 
+          (click)="toggleTheme()"
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-surface)] text-[var(--text-primary)] transition-all hover:scale-110 active:scale-95 border border-[var(--border-color)]"
+        >
+          <svg *ngIf="!isLightMode()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M3 12h2.25m.386-6.364l1.591 1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M18.75 12a6.75 6.75 0 11-13.5 0 6.75 6.75 0 0113.5 0z" />
+          </svg>
+          <svg *ngIf="isLightMode()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+          </svg>
+        </button>
+
+        <button class="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--bg-surface)] text-[var(--text-primary)] transition-all hover:bg-violet-600/10 border border-[var(--border-color)]">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-violet-600"></span>
+        </button>
+
+        <div class="h-10 w-10 overflow-hidden rounded-xl border-2 border-violet-600 shadow-lg shadow-violet-600/20 transition-transform hover:scale-105 cursor-pointer">
+           <div class="h-full w-full bg-gradient-to-tr from-violet-600 to-fuchsia-600 flex items-center justify-center text-xs font-bold text-white">
+             {{ username.substring(0, 1) }}
+           </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Scrollable content Area -->
+    <main class="flex-1 overflow-y-auto p-8 lg:p-12">
+      <div class="max-w-6xl mx-auto">
+         <router-outlet />
+      </div>
+    </main>
   </div>
+
+  <!-- Bottom Navigation (Mobile Only) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-50 flex h-16 border-t border-[var(--border-color)] bg-[var(--bg-header)] backdrop-blur-lg md:hidden">
+    <a routerLink="/user/dashboard" class="flex flex-1 flex-col items-center justify-center gap-1 text-[10px] uppercase font-bold text-[var(--text-secondary)]" routerLinkActive="text-violet-600">
+      <svg class="h-5 w-5"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" fill="currentColor"/></svg>
+      Home
+    </a>
+    <a routerLink="/user/explore" class="flex flex-1 flex-col items-center justify-center gap-1 text-[10px] uppercase font-bold text-[var(--text-secondary)]" routerLinkActive="text-violet-600">
+      <svg class="h-5 w-5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" fill="none"/></svg>
+      Explore
+    </a>
+    <a routerLink="/user/progress" class="flex flex-1 flex-col items-center justify-center gap-1 text-[10px] uppercase font-bold text-[var(--text-secondary)]" routerLinkActive="text-violet-600">
+      <svg class="h-5 w-5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/></svg>
+      Status
+    </a>
+    <a routerLink="/user/profile" class="flex flex-1 flex-col items-center justify-center gap-1 text-[10px] uppercase font-bold text-[var(--text-secondary)]" routerLinkActive="text-violet-600">
+      <svg class="h-5 w-5"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-5.33 0-8 2.67-8 8h16c0-5.33-2.67-8-8-8z" fill="currentColor"/></svg>
+      You
+    </a>
+  </nav>
+
 </div>

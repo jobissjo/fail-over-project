@@ -5,7 +5,7 @@ from app.schemas.media import MediaCreate, MediaOut, MediaUpdate
 from app.services.media_service import MediaService
 from app.utils.pagination import Page, PageMeta
 
-router = APIRouter(prefix="/media", tags=["media"])
+router = APIRouter(prefix="/api/media", tags=["media"])
 
 
 @router.get("/", response_model=Page)

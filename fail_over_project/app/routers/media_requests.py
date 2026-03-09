@@ -5,7 +5,7 @@ from app.models.user import User
 from app.schemas.media_request import MediaRequestAdminPatch, MediaRequestCreate, MediaRequestOut
 from app.services.media_request_service import MediaRequestService
 
-router = APIRouter(prefix="/media-requests", tags=["media-requests"])
+router = APIRouter(prefix="/api/media-requests", tags=["media-requests"])
 
 
 @router.post("/", response_model=MediaRequestOut, status_code=status.HTTP_201_CREATED)

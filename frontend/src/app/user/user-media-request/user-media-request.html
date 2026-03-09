@@ -1,1 +1,128 @@
-<p>user-media-request works!</p>
+<div class="space-y-10 pb-12">
+  
+  <div class="flex flex-col gap-10 lg:flex-row">
+    
+    <!-- Request Form -->
+    <div class="w-full lg:w-128 shrink-0">
+      <div class="sticky top-6 rounded-[2.5rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-8 backdrop-blur-3xl shadow-2xl">
+        <h2 class="text-xl font-bold tracking-tight text-[var(--text-primary)]">New Media Request</h2>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Can't find what you're looking for? Let the admins know.</p>
+
+        <form class="mt-8 space-y-6" [formGroup]="form" (ngSubmit)="submitRequest()">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2 ml-1">Media Title</label>
+            <input
+              formControlName="media_title"
+              class="w-full rounded-2xl bg-[var(--bg-input)] border border-[var(--border-color)] px-5 py-3 text-sm transition-all focus:border-violet-500/50 focus:bg-[var(--bg-input)] outline-none focus:ring-4 focus:ring-violet-500/10 placeholder:text-[var(--text-muted)]"
+              placeholder="e.g. Inception, Elden Ring, etc."
+            />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2 ml-1">Request Type</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button 
+                type="button"
+                (click)="form.get('request_type')?.setValue('ADD')"
+                class="rounded-xl border border-[var(--border-color)] py-3 text-xs font-bold transition-all"
+                [class.bg-violet-600]="form.get('request_type')?.value === 'ADD'"
+                [class.text-white]="form.get('request_type')?.value === 'ADD'"
+                [class.text-[var(--text-muted)]]="form.get('request_type')?.value !== 'ADD'"
+                [class.bg-[var(--bg-input)]]="form.get('request_type')?.value !== 'ADD'"
+              >
+                New Media
+              </button>
+              <button 
+                type="button"
+                (click)="form.get('request_type')?.setValue('UPDATE')"
+                class="rounded-xl border border-[var(--border-color)] py-3 text-xs font-bold transition-all"
+                [class.bg-violet-600]="form.get('request_type')?.value === 'UPDATE'"
+                [class.text-white]="form.get('request_type')?.value === 'UPDATE'"
+                [class.text-[var(--text-muted)]]="form.get('request_type')?.value !== 'UPDATE'"
+                [class.bg-[var(--bg-input)]]="form.get('request_type')?.value !== 'UPDATE'"
+              >
+                Update Existing
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-2 ml-1">Reason / Description</label>
+            <textarea
+              formControlName="description"
+              rows="4"
+              class="w-full rounded-2xl bg-[var(--bg-input)] border border-[var(--border-color)] px-5 py-3 text-sm transition-all focus:border-violet-500/50 focus:bg-[var(--bg-input)] outline-none focus:ring-4 focus:ring-violet-500/10 placeholder:text-[var(--text-muted)]"
+              placeholder="Why should we add this? Any specific version or details?"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="relative w-full overflow-hidden rounded-2xl bg-violet-600 px-6 py-4 text-sm font-bold text-white transition-all hover:bg-violet-500 hover:shadow-xl hover:shadow-violet-600/30 disabled:opacity-50"
+            [disabled]="submitting() || form.invalid"
+          >
+            <span [class.opacity-0]="submitting()">Submit Request</span>
+            @if (submitting()) {
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
+              </div>
+            }
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Requests History -->
+    <div class="flex-1 min-w-0">
+      <div class="rounded-[2.5rem] border border-[var(--border-color)] bg-[var(--bg-card)] p-8 backdrop-blur-xl">
+        <h2 class="text-xl font-bold tracking-tight text-[var(--text-primary)]">Request History</h2>
+        
+        <div class="mt-8 space-y-4">
+          <div *ngIf="loading()" class="flex h-32 items-center justify-center">
+            <div class="h-8 w-8 animate-spin rounded-full border-2 border-violet-500/20 border-t-violet-500"></div>
+          </div>
+
+          <div *ngIf="!loading() && requests().length === 0" class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-[var(--border-color)] py-16 opacity-30">
+            <div class="text-4xl mb-4 text-[var(--text-primary)]">📨</div>
+            <p class="text-sm font-bold uppercase tracking-widest text-[var(--text-primary)]">No requests yet</p>
+          </div>
+
+          <div 
+            *ngFor="let req of requests()" 
+            class="group rounded-3xl border border-[var(--border-color)] bg-[var(--bg-input)] p-6 transition-all hover:bg-[var(--bg-surface)] hover:ring-1 hover:ring-[var(--accent)]"
+          >
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div class="flex items-center gap-3">
+                  <h3 class="text-base font-bold text-[var(--text-primary)]">{{ req.title }}</h3>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">#{{ req.id }}</span>
+                </div>
+                <p class="mt-1 text-sm text-[var(--text-secondary)] line-clamp-1">{{ req.description }}</p>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                  <div class="text-[10px] font-bold uppercase tracking-widest text-[#8b5cf6]">{{ req.request_type }}</div>
+                  <div class="text-[10px] text-[var(--text-muted)]">Sent recently</div>
+                </div>
+                <div 
+                  class="rounded-xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest"
+                  [ngClass]="getStatusClass(req.status)"
+                >
+                  {{ req.status }}
+                </div>
+              </div>
+            </div>
+            
+            <!-- Admin Note -->
+            <div *ngIf="req.admin_note" class="mt-4 rounded-2xl bg-[var(--bg-card)] p-4 ring-1 ring-[var(--border-color)]">
+              <div class="text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Admin Response</div>
+              <p class="text-xs text-amber-500 italic">"{{ req.admin_note }}"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

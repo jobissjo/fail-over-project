@@ -20,6 +20,8 @@ anyio==4.12.1
     #   watchfiles
 asyncpg==0.31.0
     # via tortoise-orm
+bcrypt==5.0.0
+    # via passlib
 certifi==2026.2.25
     # via
     #   httpcore
@@ -75,6 +77,8 @@ markupsafe==3.0.3
     # via jinja2
 mdurl==0.1.2
     # via markdown-it-py
+passlib[bcrypt]==1.7.4
+    # via -r requirements.in
 pydantic[email]==2.12.5
     # via
     #   fastapi
@@ -87,10 +91,10 @@ pydantic-extra-types==2.11.0
     # via fastapi
 pydantic-settings==2.13.1
     # via fastapi
-pyjwt==2.10.1
-    # via -r requirements.in
 pygments==2.19.2
     # via rich
+pyjwt==2.10.1
+    # via -r requirements.in
 pypika-tortoise==0.6.3
     # via tortoise-orm
 python-dotenv==1.2.2
@@ -111,8 +115,6 @@ rich-toolkit==0.19.7
     #   fastapi-cloud-cli
 rignore==0.7.6
     # via fastapi-cloud-cli
-passlib[bcrypt]==1.7.4
-    # via -r requirements.in
 sentry-sdk==2.54.0
     # via fastapi-cloud-cli
 shellingham==1.5.4
