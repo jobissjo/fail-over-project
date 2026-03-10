@@ -9,6 +9,8 @@ export type MediaOut = {
   title: string;
   image?: string | null;
   media_type_id: number;
+  type_name?: string | null;
+  type_structure?: string | null;
   total_series: number;
   description?: string | null;
   media_type?: string | null;

@@ -16,5 +16,5 @@ async def register(payload: RegisterIn):
 @router.post("/login", response_model=TokenOut)
 async def login(payload: LoginIn):
     service = AuthService()
-    token = await service.login(payload)
-    return TokenOut(access_token=token)
+    token, role = await service.login(payload)
+    return TokenOut(access_token=token, role=role)

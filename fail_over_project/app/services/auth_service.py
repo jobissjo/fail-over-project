@@ -19,6 +19,7 @@ class AuthService:
             username=data.username,
             email=data.email,
             hashed_password=hash_password(data.password),
+            role=data.role,
         )
         return user
 
@@ -30,4 +31,4 @@ class AuthService:
         if not verify_password(data.password, user.password):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
 
-        return create_access_token(subject=str(user.id), role=user.role.value)
+        return create_access_token(subject=str(user.id), role=user.role.value), user.role

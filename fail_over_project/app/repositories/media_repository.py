@@ -4,11 +4,11 @@ from app.models.media import Media
 class MediaRepository:
     async def list(self, *, offset: int = 0, limit: int = 20) -> tuple[list[Media], int]:
         total = await Media.all().count()
-        items = await Media.all().order_by("id").offset(offset).limit(limit)
+        items = await Media.all().prefetch_related("media_type").order_by("id").offset(offset).limit(limit)
         return items, total
 
     async def get(self, media_id: int) -> Media | None:
-        return await Media.get_or_none(id=media_id)
+        return await Media.get_or_none(id=media_id).prefetch_related("media_type")
 
     async def create(
         self,

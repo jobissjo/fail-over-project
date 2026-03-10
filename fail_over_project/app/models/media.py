@@ -20,5 +20,19 @@ class Media(Model):
         on_delete=fields.CASCADE
     )
 
+    @property
+    def type_name(self) -> str | None:
+        try:
+            return self.media_type.name
+        except AttributeError:
+            return None
+
+    @property
+    def type_structure(self) -> str | None:
+        try:
+            return self.media_type.structure
+        except AttributeError:
+            return None
+
     def __str__(self):
         return self.title

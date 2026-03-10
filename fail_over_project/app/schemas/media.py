@@ -6,6 +6,8 @@ class MediaOut(BaseModel):
     title: str
     image: str | None = None
     media_type_id: int
+    type_name: str | None = None
+    type_structure: str | None = None
     total_series: int
     description: str | None = None
 

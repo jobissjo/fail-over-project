@@ -38,8 +38,11 @@
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Media Type ID</label>
-            <input type="number" formControlName="media_type_id" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 ml-1">Media Type</label>
+            <select formControlName="media_type_id" class="w-full rounded-2xl bg-black/40 border border-white/5 px-5 py-3 text-sm outline-none focus:ring-2 focus:ring-amber-500/40 appearance-none text-white">
+              <option [value]="null" disabled>Select Type</option>
+              <option *ngFor="let type of mediaTypes()" [value]="type.id">{{ type.name }}</option>
+            </select>
           </div>
 
           <div>
@@ -83,7 +86,11 @@
                 <div class="font-bold text-white group-hover:text-amber-500 transition-colors">{{ m.title }}</div>
               </div>
             </td>
-            <td class="py-4 text-sm text-white/40">ID: {{ m.media_type_id }}</td>
+            <td class="py-4 text-sm text-white/40">
+              <span class="rounded-full bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white/60">
+                {{ getMediaTypeName(m) }}
+              </span>
+            </td>
             <td class="py-4 text-sm font-mono text-white/60">{{ m.total_series }}</td>
             <td class="py-4 pr-4 text-right">
               <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

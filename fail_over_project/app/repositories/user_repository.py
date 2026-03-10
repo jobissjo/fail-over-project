@@ -1,4 +1,4 @@
-from app.models.user import User
+from app.models.user import User, UserRole
 
 
 class UserRepository:
@@ -8,5 +8,5 @@ class UserRepository:
     async def get_by_email(self, email: str) -> User | None:
         return await User.get_or_none(email=email)
 
-    async def create_user(self, username: str, email: str, hashed_password: str) -> User:
-        return await User.create(username=username, email=email, password=hashed_password)
+    async def create_user(self, username: str, email: str, hashed_password: str, role: UserRole) -> User:
+        return await User.create(username=username, email=email, password=hashed_password, role=role)

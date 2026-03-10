@@ -2,6 +2,7 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Media as MediaService, MediaOut } from '../../Services/media';
+import { MediaTypeService, MediaTypeOut } from '../../Services/media-type';
 
 @Component({
   selector: 'app-media',
@@ -13,8 +14,10 @@ import { Media as MediaService, MediaOut } from '../../Services/media';
 export class Media implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly mediaService = inject(MediaService);
+  private readonly mediaTypeService = inject(MediaTypeService);
 
   mediaList = signal<MediaOut[]>([]);
+  mediaTypes = signal<MediaTypeOut[]>([]);
   loading = signal(true);
   
   editingMedia = signal<MediaOut | null>(null);
@@ -26,28 +29,41 @@ export class Media implements OnInit {
       title: ['', [Validators.required]],
       description: [''],
       image: [''],
-      media_type_id: [1, [Validators.required]],
+      media_type_id: [null, [Validators.required]],
       total_series: [0],
     });
 
-    this.loadMedia();
+    this.loadInitialData();
   }
 
-  async loadMedia() {
+  async loadInitialData() {
     this.loading.set(true);
     try {
-      const page = await this.mediaService.list(1, 100);
-      this.mediaList.set(page.items);
+      const [mediaPage, types] = await Promise.all([
+        this.mediaService.list(1, 100),
+        this.mediaTypeService.list()
+      ]);
+      this.mediaList.set(mediaPage.items);
+      this.mediaTypes.set(types);
     } catch (e) {
-      console.error('Failed to load media', e);
+      console.error('Failed to load data', e);
     } finally {
       this.loading.set(false);
     }
   }
 
+  async loadMedia() {
+    try {
+      const page = await this.mediaService.list(1, 100);
+      this.mediaList.set(page.items);
+    } catch (e) {
+      console.error('Failed to load media', e);
+    }
+  }
+
   openCreateForm() {
     this.editingMedia.set(null);
-    this.form.reset({ media_type_id: 1, total_series: 0 });
+    this.form.reset({ media_type_id: this.mediaTypes()[0]?.id || null, total_series: 0 });
     this.showForm.set(true);
   }
 
@@ -82,5 +98,10 @@ export class Media implements OnInit {
     } catch (e) {
       console.error('Failed to delete media', e);
     }
+  }
+
+  getMediaTypeName(m: MediaOut): string {
+    if (m.type_name) return m.type_name;
+    return this.mediaTypes().find(t => t.id === m.media_type_id)?.name || `ID: ${m.media_type_id}`;
   }
 }
