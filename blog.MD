@@ -50,29 +50,27 @@ This means:
 
 ### PostgreSQL nodes
 
+All nodes (`pg1`, `pg2`, `pg3`) now use **persistent volumes** and **health checks** to ensure data survival and reliable startup.
+
 #### `pg1` (initial “primary” candidate)
 
 In `docker-compose.yml`, `pg1` is configured with:
 
 - Image: `postgres:16`
 - Port mapping: `5433:5432`
+- **Persistence**: Using named volume `pg1_data:/var/lib/postgresql/data`.
+- **Health check**: Uses `pg_isready` to ensure the DB is fully initialized before dependent services (like HAProxy) start.
 - Initializes a database: `POSTGRES_DB: testdb`
-- Runs `./primary/init.sql` at startup via:
+- Runs `./primary/init.sql` at startup.
 
-```yml
-volumes:
-  - ./primary/init.sql:/docker-entrypoint-initdb.d/init.sql
-```
+#### `pg2` and `pg3` (standby candidates)
 
-#### `pg2` and `pg3` (additional nodes)
+- `pg2` maps `5434:5432` with volume `pg2_data`.
+- `pg3` maps `5435:5432` with volume `pg3_data`.
 
-`pg2` and `pg3` also run Postgres 16:
-
-- `pg2` maps `5434:5432`
-- `pg3` maps `5435:5432`
-
-Important: **as currently written, `pg2` and `pg3` are not configured as streaming replicas yet.**
-They start as separate Postgres instances unless you add replica initialization and replication configuration.
+> [!IMPORTANT]
+> **Data Persistence**: By adding named volumes, your data now survives container restarts and even `docker compose down`.
+> **Startup Order**: HAProxy now waits for these Postgres nodes to be "healthy" before it begins routing traffic.
 
 ## 4) Primary initialization (`primary/init.sql`)
 
@@ -112,47 +110,25 @@ This creates a stable endpoint for “write” traffic:
 - `haproxy:5000` (inside Docker network)
 - `localhost:5000` (published via compose)
 
-### 5.2 Read frontend (port 5001) — defined but not published in compose
+### 5.2 Read frontend (port 5001)
 
-```haproxy
-frontend postgres_read
-    bind *:5001
-    default_backend replica_db
+Now fully exposed in `docker-compose.yml`:
+- `haproxy:5001` (internal)
+- `localhost:5001` (external)
+
+### 5.3 Backends & Service Dependencies
+
+HAProxy now depends on the health of the underlying Postgres nodes:
+
+```yml
+depends_on:
+  pg1:
+    condition: service_healthy
+  pg2:
+    condition: service_healthy
+  pg3:
+    condition: service_healthy
 ```
-
-This is intended to be used for read-only traffic. However, note:
-
-- In `docker-compose.yml`, only `5000:5000` is published.
-- If you want to access the read frontend from your host machine, you would also publish `5001:5001`.
-
-### 5.3 Backends: which DB nodes HAProxy can route to
-
-Both backends include all nodes. We use `option tcp-check` for basic connectivity verification:
-
-```haproxy
-backend primary_db
-    option tcp-check
-    tcp-check connect
-    
-    server pg1 pg1:5432 check
-    server pg2 pg2:5432 check
-    server pg3 pg3:5432 check
-
-backend replica_db
-    balance roundrobin
-    option tcp-check
-    tcp-check connect
-    
-    server pg1 pg1:5432 check
-    server pg2 pg2:5432 check
-    server pg3 pg3:5432 check
-```
-
-### What this means in practice
-
-- HAProxy is performing **TCP health checks**. By using `tcp-check connect`, we ensure that the Postgres service is listening and can successfully establish a TCP handshake.
-- While advanced binary checks (like sending a startup packet) can verify if Postgres is fully initialized, they are often sensitive to specific version handshakes or SSL requirements.
-- A simple TCP check is generally more reliable for basic high-availability, confirming that the container and the database process are running and accessible.
 
 ## 6) PgBouncer: the single entry point your app should use
 
@@ -179,16 +155,6 @@ default_pool_size = 20
 - PostgreSQL doesn’t like thousands of concurrent connections.
 - PgBouncer keeps a smaller pool of server connections and multiplexes client traffic.
 - `pool_mode = transaction` is commonly used in APIs because connections are released after each transaction.
-
-### Authentication note
-
-Your `pgbouncer/userlist.txt` is:
-
-```txt
-"postgres" "postgres"
-```
-
-With `auth_type = md5`, PgBouncer typically expects MD5-hashed passwords. Depending on image behavior and settings, plain passwords may or may not work the way you expect—so it’s worth verifying authentication is working correctly in your environment.
 
 ## 7) How to connect (what your app should use)
 
@@ -261,18 +227,36 @@ Common approaches:
 
 ## 10) Practical improvements you can do next
 
-- Publish HAProxy read port:
-  - Add `5001:5001` in `docker-compose.yml` for the `haproxy` service.
 - Make HAProxy primary/replica aware using SQL checks.
 - Configure `pg2` and `pg3` as real replicas (base backup + standby signal + replication settings).
 - Use proper secrets and stronger credentials.
 
-## Conclusion
+> [!NOTE]
+> **Crossing into Advanced Territory**: Up to this point, our code implements a solid "connectivity" failover. The sections below describe the limitations of this current setup and how we can solve them in our next guide using automated tools.
 
-This Docker Compose setup provides:
+## 11) Limitations of this Setup
 
-- Multiple Postgres nodes ready to be used behind a proxy
-- HAProxy health-checked routing
-- PgBouncer connection pooling and a stable endpoint for your application
+While this architecture is robust for local development and a great starting point for HA, it has several critical limitations:
 
-It’s an excellent foundation. With a few additions—standby configuration, role-aware routing, and promotion tooling—you can evolve it into a robust master/slave failover database architecture suitable for real-world usage.
+### 11.1 Manual Failover Only
+The setup provides **connectivity failover**, not **logic failover**. HAProxy will stop sending traffic to `pg1` if it goes down, but it will not automatically "promote" `pg2` to be a new primary. In a production environment, you would need a manager like **Patroni** or **repmgr** to handle the election of a new leader.
+
+### 11.2 Lack of Automated Streaming Replication
+Although `init.sql` prepares the primary for replication, the standby nodes (`pg2`, `pg3`) are not automatically performing a `pg_basebackup` or following the primary. Without active replication, failing over to `pg2` means you are connecting to an independent, likely empty, database.
+
+### 11.3 Write Consistency Risks
+Because HAProxy currently uses basic TCP checks, if multiple nodes are running but not replicating, a "failover" to a standby node could result in **Data Inconsistency**. Writes would go to a node that doesn't have the history of the previous primary.
+
+### 11.4 Single Point of Failure (SPOF)
+HAProxy and PgBouncer are themselves individual containers. If the `haproxy` container crashes, the entire database stack becomes unreachable, even if all Postgres nodes are healthy.
+
+### 11.5 Transaction Mode vs Session Mode
+PgBouncer is set to `pool_mode = transaction`. While efficient, this means you **cannot use session-based features** like temporary tables or certain session-level SET commands.
+
+## Conclusion & Next Steps
+
+This Docker Compose setup is a powerful foundation, now enhanced with **persistence** and **healthchecks**. It solves the immediate problem of data loss and connection stability during startup.
+
+However, as we've seen, true High Availability requires automation. **In our next article, we will look at how Patroni solves these limitations** by providing automated leader election, seamless replication management, and dynamic HAProxy configuration.
+
+Stay tuned for the next part where we take this architecture to a production-ready level!
